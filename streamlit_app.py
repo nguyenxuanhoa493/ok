@@ -13,7 +13,7 @@ from common import (
 from input import show_prizes_config, show_round_selector, show_prize_filter
 
 st.set_page_config(
-    page_title="Bảng xếp hạng",
+    page_title="Bảng xếp hạng cuộc thi",
     page_icon="⭐",
     layout="wide",
     initial_sidebar_state="expanded",
