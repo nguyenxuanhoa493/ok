@@ -1,5 +1,6 @@
 import streamlit as st
 
+
 def init_prizes_config():
     if "prize_count" not in st.session_state:
         st.session_state.prizes_data = [
@@ -11,6 +12,7 @@ def init_prizes_config():
         ]
         st.session_state.prize_count = len(st.session_state.prizes_data)
 
+
 def update_prizes():
     prizes = {}
     for i in range(st.session_state.prize_count):
@@ -20,10 +22,10 @@ def update_prizes():
             prizes[name] = quantity
     return prizes
 
+
 def show_prizes_config():
     st.subheader("Cấu hình giải thưởng")
     prizes_container = st.container()
-    
     init_prizes_config()
 
     with prizes_container:
@@ -67,6 +69,7 @@ def show_prizes_config():
 
     return update_prizes()
 
+
 def show_round_selector(list_round):
     selected_round = st.selectbox(
         "Chọn vòng thi:",
@@ -77,11 +80,43 @@ def show_round_selector(list_round):
     )
     return selected_round
 
+
 def show_prize_filter(prizes):
     prize_filter = st.multiselect(
         "Lọc theo giải:",
         options=list(prizes.keys()),
-        default=list(prizes.keys()),
+        default=None,
         help="Chọn các giải muốn hiển thị",
     )
-    return prize_filter 
+    return prize_filter
+
+
+def show_org_filter(ranking):
+    """Hiển thị dropdown lọc theo đơn vị"""
+    # Lấy danh sách unique org_name
+    org_names = sorted(list(set(item["org_name"] for item in ranking)))
+
+    selected_orgs = st.multiselect(
+        "Lọc theo đơn vị:",
+        options=org_names,
+        default=None,
+        help="Chọn các đơn vị muốn hiển thị",
+    )
+    return selected_orgs
+
+
+def show_score_filter(ranking):
+    """Hiển thị slider lọc theo điểm số"""
+    scores = [item["score"] for item in ranking]
+    min_score = min(scores) if scores else 0
+    max_score = max(scores) if scores else 100
+
+    score_range = st.slider(
+        "Lọc theo điểm:",
+        min_value=float(min_score),
+        max_value=float(max_score),
+        value=(float(min_score), float(max_score)),
+        step=0.5,
+        help="Chọn khoảng điểm muốn hiển thị",
+    )
+    return score_range
